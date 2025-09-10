@@ -72,11 +72,11 @@ def get_video_title(video_id: str) -> str:
 
 def create_filename_from_title(title: str, video_id: str, language_code: str, file_type: str) -> str:
     """
-    Create filename from video title (first 3 words) or fallback to video_id.
+    Create filename from video title (first 3 words) + video_id or fallback to video_id.
     
     Args:
         title: Video title
-        video_id: Fallback video ID
+        video_id: Video ID to append
         language_code: Language code
         file_type: Type of file (timestamped or prose)
         
@@ -90,12 +90,14 @@ def create_filename_from_title(title: str, video_id: str, language_code: str, fi
         words = clean_title.split()[:3]
         if words:
             title_part = '_'.join(words).lower()
+            # Add video_id after the title part
+            filename_base = f"{title_part}_{video_id}"
         else:
-            title_part = video_id
+            filename_base = video_id
     else:
-        title_part = video_id
+        filename_base = video_id
     
-    return f"{title_part}_transcript_{file_type}_{language_code}.txt"
+    return f"{filename_base}_transcript_{file_type}_{language_code}.txt"
 
 
 def get_available_languages(video_id: str) -> Dict[str, str]:
